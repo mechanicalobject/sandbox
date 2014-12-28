@@ -14,7 +14,8 @@ namespace MechanicalObject.Sandbox.TodoWithSQLite.Configuration
         {
             get
             {
-                return ConfigurationManager.ConnectionStrings["TodoDatabase"].ConnectionString;
+                var connectionString = ConfigurationManager.ConnectionStrings["TodoDatabase"].ConnectionString;
+                return connectionString;
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace MechanicalObject.Sandbox.TodoWithSQLite.Logger
+﻿using System;
+
+namespace MechanicalObject.Sandbox.TodoWithSQLite.Logger
 {
     public interface ILogger
     {
@@ -10,12 +12,12 @@
     {
         public void WriteLine(string message)
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine(message);
         }
 
         public void Write(string message)
         {
-            throw new System.NotImplementedException();
+            Console.Write(message);
         }
     }
 }

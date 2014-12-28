@@ -77,10 +77,10 @@ namespace MechanicalObject.Sandbox.TodoWithSQLite.Repository
                     command.CommandType = CommandType.Text;
                     command.CommandText = query;
                     
-                    command.AddParameterWithValue(@"id", todoToAdd.ModifiedOn);
-                    command.AddParameterWithValue(@"description", todoToAdd.ModifiedOn);
-                    command.AddParameterWithValue(@"status", todoToAdd.ModifiedOn);
-                    command.AddParameterWithValue(@"createdOn", todoToAdd.ModifiedOn);
+                    command.AddParameterWithValue(@"id", todoToAdd.Id);
+                    command.AddParameterWithValue(@"description", todoToAdd.Description);
+                    command.AddParameterWithValue(@"status", todoToAdd.Status);
+                    command.AddParameterWithValue(@"createdOn", todoToAdd.CreatedOn);
                     command.AddParameterWithValue(@"modifiedOn", todoToAdd.ModifiedOn);
 
                     command.ExecuteNonQuery();
