@@ -15,7 +15,7 @@ namespace MechanicalObject.Sandbox.TodoWithSQLite.Model
         {
             var descriptionToDisplay = Description.Length > 10 ? Description.Substring(0, 10) + "..." : Description;
             return string.Format(@"Id : {0}, Description = {1}, Status = {2} CreatedOn = {3} ModifiedOn = {4}",
-                     Id, Description, Status, CreatedOn, ModifiedOn);
+                     Id, descriptionToDisplay, Status, CreatedOn, ModifiedOn);
         }
     }
     public enum TodoStatus
