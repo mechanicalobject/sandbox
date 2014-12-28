@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Configuration\ConfigurationWrapper.cs" />
     <Compile Include="Database\DatabaseConnectionFactory.cs" />
+    <Compile Include="Extensions\DbCommandExtensions.cs" />
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SQLite;
 using MechanicalObject.Sandbox.TodoWithSQLite.Configuration;
 using MechanicalObject.Sandbox.TodoWithSQLite.Database;
+using MechanicalObject.Sandbox.TodoWithSQLite.Extensions;
 using MechanicalObject.Sandbox.TodoWithSQLite.Logger;
 using MechanicalObject.Sandbox.TodoWithSQLite.Model;
 
@@ -76,35 +77,11 @@ namespace MechanicalObject.Sandbox.TodoWithSQLite.Repository
                     command.CommandType = CommandType.Text;
                     command.CommandText = query;
                     
-                    var idParameter = command.CreateParameter();
-                    idParameter.ParameterName = "@id";
-                    idParameter.Value = todoToAdd.Id;
-
-                    var descriptionParameter = command.CreateParameter();
-                    descriptionParameter.ParameterName = "@description";
-                    descriptionParameter.Value = todoToAdd.Description;
-
-                    var statusParameter = command.CreateParameter();
-                    statusParameter.ParameterName = "@status";
-                    statusParameter.Value = (int)todoToAdd.Status;
-
-                    var createdOnParameter = command.CreateParameter();
-                    createdOnParameter.ParameterName = "@createdOn";
-                    createdOnParameter.Value =todoToAdd.CreatedOn;
-
-                    var modifiedOnParameter = command.CreateParameter();
-                    createdOnParameter.ParameterName = "@modifiedOn";
-                    createdOnParameter.Value =todoToAdd.ModifiedOn;
-
-                    command.Parameters.Add(statusParameter);
-                    command.Parameters.Add(idParameter);
-
-
-                    command.Parameters.Add(idParameter);
-                    command.Parameters.Add(descriptionParameter);
-                    command.Parameters.Add(createdOnParameter);
-                    command.Parameters.Add(modifiedOnParameter);
-                    command.Parameters.Add(statusParameter);
+                    command.AddParameterWithValue(@"id", todoToAdd.ModifiedOn);
+                    command.AddParameterWithValue(@"description", todoToAdd.ModifiedOn);
+                    command.AddParameterWithValue(@"status", todoToAdd.ModifiedOn);
+                    command.AddParameterWithValue(@"createdOn", todoToAdd.ModifiedOn);
+                    command.AddParameterWithValue(@"modifiedOn", todoToAdd.ModifiedOn);
 
                     command.ExecuteNonQuery();
                 }
@@ -177,13 +154,15 @@ namespace MechanicalObject.Sandbox.TodoWithSQLite.Repository
                     var statusParameter = command.CreateParameter();
                     statusParameter.ParameterName = "@status";
                     statusParameter.Value = (int) todoToUpdate.Status;
+                    command.Parameters.Add(statusParameter);
 
+                    // this call is equivalent to :
+                    // command.AddParameterWithValue("@id",todoToUpdate.Id);
                     var idParameter = command.CreateParameter();
                     idParameter.ParameterName = "@id";
                     idParameter.Value = todoToUpdate.Id;
-
-                    command.Parameters.Add(statusParameter);
                     command.Parameters.Add(idParameter);
+                    
                     command.ExecuteNonQuery();
                 }
             }
