@@ -1,64 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MonitoringPlatform.Messages;
 using MonitoringPlatform.Models;
-using MonitoringPlatform.Repositories;
+using MonitoringPlatform.Services;
 using MonitoringPlatform.ViewModels.ObservableObjects;
 
 namespace MonitoringPlatform.ViewModels
 {
     public class UsersViewModel : TabViewModelBase
     {
-        private readonly IUsersRepository _usersRepository;
+        private readonly IUsersService _usersService;
         private ObservableCollection<UserOo> _users;
+
         private bool _isBusy;
 
-        public UsersViewModel(IUsersRepository usersRepository)
+        public UsersViewModel(IUsersService usersService)
         {
-            _usersRepository = usersRepository;
+            _usersService = usersService;
         }
 
-        private void InitUsers()
+        private async Task InitUsers()
         {
             IsBusy = true;
 
             _users = new ObservableCollection<UserOo>();
 
             IList<UserModel> users = null;
-            
-            Task.Run(
-                () =>
-                {
-                    try
-                    {
-                        users = _usersRepository.GetUsers();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessengerInstance.Send(new UsersRepositoryErrorMessage { Error = ex });
-                    }
 
-                    // The folowing line simulates a long task
-                    // You can safely remove it
-                    Thread.Sleep(2000);
-                }).ContinueWith(
-                        previous =>
-                        {
-                            IsBusy = false;
-                            if (users != null)
-                            {
-                                foreach (UserModel userModel in users)
-                                {
-                                    _users.Add(Mapper.Map<UserModel, UserOo>(userModel));
-                                }
-                            }
-                        }, TaskScheduler.FromCurrentSynchronizationContext());
+            try
+            {
+                users = await _usersService.GetUsers();
+            }
+            catch (Exception ex)
+            {
+                MessengerInstance.Send(new UsersRepositoryErrorMessage { Error = ex });
+            }
+
+            IsBusy = false;
+            if (users != null)
+            {
+                foreach (UserModel userModel in users)
+                {
+                    Users.Add(Mapper.Map<UserModel, UserOo>(userModel));
+                }
+            }
         }
 
+        public override async Task SetFocusAsync()
+        {
+            await InitUsers();
+        }
 
         public override string TabName
         {
@@ -72,10 +66,15 @@ namespace MonitoringPlatform.ViewModels
         {
             get
             {
-                if (_users == null)
-                    InitUsers();
+                return _users;
+            }
+            set
+            {
+                if (_users == value)
+                    return;
 
-                return this._users;
+                _users = value;
+                this.RaisePropertyChanged();
             }
         }
 
@@ -94,8 +93,9 @@ namespace MonitoringPlatform.ViewModels
                 this.RaisePropertyChanged();
             }
         }
-
     }
+
+
 
 
 }

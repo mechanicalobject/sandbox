@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using MonitoringPlatform.Repositories;
+using MonitoringPlatform.Services;
 
 namespace MonitoringPlatform.ViewModels
 {
@@ -25,7 +26,7 @@ namespace MonitoringPlatform.ViewModels
 
         private static void RegisterServices()
         {
-            //
+            SimpleIoc.Default.Register<IUsersService, UsersService>();
         }
 
         private static void RegisterViewModels()

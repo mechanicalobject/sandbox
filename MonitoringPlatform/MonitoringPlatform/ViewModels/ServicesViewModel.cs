@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows;
 using AutoMapper;
 using MonitoringPlatform.Models;
@@ -50,6 +51,11 @@ namespace MonitoringPlatform.ViewModels
             {
                 return "Services";
             }
+        }
+
+        public override Task SetFocusAsync()
+        {
+            return new Task(() => { /*Nothing to do in here*/ });
         }
 
         public ObservableCollection<ServiceOo> WindowsServices

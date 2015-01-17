@@ -100,6 +100,7 @@
     <Compile Include="Models\WindowsServiceStatus.cs" />
     <Compile Include="Repositories\ServicesRepository.cs" />
     <Compile Include="Repositories\UsersRepository.cs" />
+    <Compile Include="Services\UsersService.cs" />
     <Compile Include="ViewModels\ObservableObjects\ServiceOo.cs" />
     <Compile Include="ViewModels\ObservableObjects\UserOo.cs" />
     <Compile Include="ViewModels\ServicesViewModel.cs" />
