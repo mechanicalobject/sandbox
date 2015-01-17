@@ -48,6 +48,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -70,6 +72,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\ServiceModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\WindowsServiceStatus.cs" />
     <Compile Include="Repositories\ServicesRepository.cs" />
     <Compile Include="Repositories\UsersRepository.cs" />
     <Compile Include="ViewModels\ServicesViewModel.cs" />

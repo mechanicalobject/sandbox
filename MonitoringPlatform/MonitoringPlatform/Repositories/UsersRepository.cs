@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.DirectoryServices;
 using MonitoringPlatform.Models;
 
 namespace MonitoringPlatform.Repositories
@@ -11,9 +14,19 @@ namespace MonitoringPlatform.Repositories
     {
         public IList<UserModel> GetUsers()
         {
-            // TODO
-            return null;
-        }
+            IList<UserModel> users = new List<UserModel>();
 
+            DirectoryEntry localMachine = new DirectoryEntry("WinNT://" + Environment.MachineName);
+            DirectoryEntry admGroup = localMachine.Children.Find("users", "group");
+            object members = admGroup.Invoke("members", null);
+            foreach (object groupMember in (IEnumerable)members)
+            {
+                DirectoryEntry member = new DirectoryEntry(groupMember);
+                UserModel user = new UserModel();
+                user.Name = member.Name;
+                users.Add(user);
+            }
+            return users;
+        }
     }
 }
