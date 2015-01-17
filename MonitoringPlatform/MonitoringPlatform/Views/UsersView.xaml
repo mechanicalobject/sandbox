@@ -6,6 +6,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBlock Text="I'm the Users view"></TextBlock>
+        <ListView ItemsSource="{Binding Users}" Margin="2">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="250" Header="User Name" DisplayMemberBinding="{Binding Name}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
     </Grid>
 </UserControl>
