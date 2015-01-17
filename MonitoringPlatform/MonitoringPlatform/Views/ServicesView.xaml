@@ -6,6 +6,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBlock Text="I'm the Services view"></TextBlock>
+        <ListView ItemsSource="{Binding WindowsServices}" Margin="2">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="250" Header="Service Name" DisplayMemberBinding="{Binding ServiceName}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
     </Grid>
 </UserControl>
