@@ -1,5 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using AutoMapper;
+using MonitoringPlatform.Messages;
 using MonitoringPlatform.Models;
 using MonitoringPlatform.Repositories;
 using MonitoringPlatform.ViewModels.ObservableObjects;
@@ -14,23 +17,27 @@ namespace MonitoringPlatform.ViewModels
         public UsersViewModel(IUsersRepository usersRepository)
         {
             _usersRepository = usersRepository;
-
-            InitUsers();
         }
 
         private void InitUsers()
         {
-            if (Users == null)
-                Users = new ObservableCollection<UserOo>();
+            _users = new ObservableCollection<UserOo>();
 
-            Users.Clear();
+            IList<UserModel> users = null;
+            try
+            {
+                users = _usersRepository.GetUsers();
+            }
+            catch (Exception ex)
+            {
+                MessengerInstance.Send(new UsersRepositoryErrorMessage { Error = ex });
+            }
 
-            var users = _usersRepository.GetUsers();
             if (users != null)
             {
                 foreach (UserModel userModel in users)
                 {
-                    Users.Add(Mapper.Map<UserModel, UserOo>(userModel));
+                    _users.Add(Mapper.Map<UserModel, UserOo>(userModel));
                 }
             }
         }
@@ -47,17 +54,13 @@ namespace MonitoringPlatform.ViewModels
         {
             get
             {
-                return this._users;
-            }
-            set
-            {
-                if (value == _users)
-                    return;
+                if (_users == null)
+                    InitUsers();
 
-                this._users = value;
-                this.RaisePropertyChanged();
+                return this._users;
             }
         }
     }
+
 
 }

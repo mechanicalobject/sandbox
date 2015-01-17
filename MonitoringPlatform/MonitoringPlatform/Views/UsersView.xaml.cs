@@ -1,28 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using GalaSoft.MvvmLight.Messaging;
+using MonitoringPlatform.Messages;
 
 namespace MonitoringPlatform.Views
 {
-    /// <summary>
-    /// Interaction logic for UsersView.xaml
-    /// </summary>
-    public partial class UsersView : UserControl
+    public partial class UsersView
     {
         public UsersView()
         {
             InitializeComponent();
+
+            Messenger.Default.Register<UsersRepositoryErrorMessage>(this, ReactOnUserError);
+        }
+
+        private void ReactOnUserError(UsersRepositoryErrorMessage error)
+        {
+            MessageBox.Show(error.Error.Message);
+        }
+
+        ~UsersView()
+        {
+            Messenger.Default.Unregister<UsersRepositoryErrorMessage>(this, ReactOnUserError);
         }
     }
+
 }
