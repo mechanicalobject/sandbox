@@ -14,7 +14,8 @@ namespace MonitoringPlatform.Repositories
     {
         public IList<UserModel> GetUsers()
         {
-            throw new ApplicationException("Error just for test");
+            // to test the messenger
+            //throw new ApplicationException("Error just for test");
             IList<UserModel> users = new List<UserModel>();
 
             DirectoryEntry localMachine = new DirectoryEntry("WinNT://" + Environment.MachineName);

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using MonitoringPlatform.Messages;
 using MonitoringPlatform.Models;
@@ -13,6 +15,7 @@ namespace MonitoringPlatform.ViewModels
     {
         private readonly IUsersRepository _usersRepository;
         private ObservableCollection<UserOo> _users;
+        private bool _isBusy;
 
         public UsersViewModel(IUsersRepository usersRepository)
         {
@@ -21,26 +24,41 @@ namespace MonitoringPlatform.ViewModels
 
         private void InitUsers()
         {
+            IsBusy = true;
+
             _users = new ObservableCollection<UserOo>();
 
             IList<UserModel> users = null;
-            try
-            {
-                users = _usersRepository.GetUsers();
-            }
-            catch (Exception ex)
-            {
-                MessengerInstance.Send(new UsersRepositoryErrorMessage { Error = ex });
-            }
-
-            if (users != null)
-            {
-                foreach (UserModel userModel in users)
+            
+            Task.Run(
+                () =>
                 {
-                    _users.Add(Mapper.Map<UserModel, UserOo>(userModel));
-                }
-            }
+                    try
+                    {
+                        users = _usersRepository.GetUsers();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessengerInstance.Send(new UsersRepositoryErrorMessage { Error = ex });
+                    }
+
+                    // The folowing line simulates a long task
+                    // You can safely remove it
+                    Thread.Sleep(2000);
+                }).ContinueWith(
+                        previous =>
+                        {
+                            IsBusy = false;
+                            if (users != null)
+                            {
+                                foreach (UserModel userModel in users)
+                                {
+                                    _users.Add(Mapper.Map<UserModel, UserOo>(userModel));
+                                }
+                            }
+                        }, TaskScheduler.FromCurrentSynchronizationContext());
         }
+
 
         public override string TabName
         {
@@ -60,6 +78,23 @@ namespace MonitoringPlatform.ViewModels
                 return this._users;
             }
         }
+
+        public bool IsBusy
+        {
+            get
+            {
+                return this._isBusy;
+            }
+            set
+            {
+                if (_isBusy == value)
+                    return;
+
+                this._isBusy = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
     }
 
 
